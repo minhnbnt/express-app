@@ -28,7 +28,7 @@ URLS.forEach((url, index) => {
     const text = await response.text();
 
     if (response.ok && text) {
-      cache[index] = await response.text();
+      cache[index] = text;
     } else {
       console.error(`Request failed with status code: ${response.status}`);
     }
