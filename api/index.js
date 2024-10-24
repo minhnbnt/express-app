@@ -1,6 +1,12 @@
 import express from "express";
 
 const PORT = process.env.PORT || 8080;
+const URLS = [
+  "http://sharing.gotdns.ch:8091/thapcam.php",
+  "http://sharing.gotdns.ch:8091/gavang.php",
+];
+
+let cache = [];
 
 const app = express();
 
@@ -8,13 +14,19 @@ app.get("/", async (_, res) => {
   res.send({ message: "Hello, world!" });
 });
 
-app.get("/get.php", async (_, res) => {
-  const response = await fetch("http://sharing.gotdns.ch:8091/thapcam.php");
-  const data = await response.text();
+URLS.forEach((url, index) => {
+  async function start() {
+    const response = await fetch(url);
+    cache[index] = await response.text();
+  }
 
-  res.type("text/plain").send("#EXTM3U\n" + data);
+  setInterval(start, 30000);
+
+  app.get(`/${index}/get.php`, async (_, res) => {
+    res.type("text/plain").send("#EXTM3U\n" + cache[index]);
+  });
 });
 
-app.listen(PORT, () => console.log(`Server ready on port ${PORT}.`));
+app.listen(PORT);
 
 export default app;
