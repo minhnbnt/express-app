@@ -15,8 +15,15 @@ app.get("/", async (_, res) => {
 });
 
 URLS.forEach((url, index) => {
-  async function start() {
-    const response = await fetch(url);
+  async function fetchNewData() {
+    let response;
+
+    try {
+      response = await fetch(url);
+    } catch (err) {
+      console.error(err);
+    }
+
     if (response.ok) {
       cache[index] = await response.text();
     } else {
@@ -24,7 +31,7 @@ URLS.forEach((url, index) => {
     }
   }
 
-  setInterval(start, 30000);
+  setInterval(fetchNewData, 30000);
 
   app.get(`/${index}/get.php`, async (_, res) => {
     res.type("text/plain").send("#EXTM3U\n" + cache[index]);
