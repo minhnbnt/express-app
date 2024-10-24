@@ -16,11 +16,11 @@ app.get("/", async (_, res) => {
 
 URLS.forEach((url, index) => {
   async function start() {
-    try {
-      const response = await fetch(url);
+    const response = await fetch(url);
+    if (response.ok) {
       cache[index] = await response.text();
-    } catch (error) {
-      console.error(error);
+    } else {
+      console.error(`Request failed with status code: ${response.status}`);
     }
   }
 
