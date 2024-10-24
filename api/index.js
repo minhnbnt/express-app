@@ -1,5 +1,4 @@
 import express from "express";
-import axios from "axios";
 
 const PORT = process.env.PORT || 8080;
 
@@ -10,10 +9,8 @@ app.get("/", async (_, res) => {
 });
 
 app.get("/get.php", async (_, res) => {
-  const { data } = await axios.get(
-    "http://sharing.gotdns.ch:8091/thapcam.php",
-    { responseType: "text" },
-  );
+  const response = await fetch("http://sharing.gotdns.ch:8091/thapcam.php");
+  const data = await response.text();
 
   res.type("text/plain").send("#EXTM3U\n" + data);
 });
