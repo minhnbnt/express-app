@@ -5,6 +5,10 @@ const PORT = process.env.PORT || 8080;
 
 const app = express();
 
+app.get("/", async (_, res) => {
+  res.send({ message: "Hello, world!" });
+});
+
 app.get("/get.php", async (_, res) => {
   const { data } = await axios.get(
     "http://sharing.gotdns.ch:8091/thapcam.php",
