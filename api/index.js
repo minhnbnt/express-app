@@ -22,9 +22,12 @@ URLS.forEach((url, index) => {
       response = await fetch(url);
     } catch (err) {
       console.error(err);
+      return;
     }
 
-    if (response.ok) {
+    const text = await response.text();
+
+    if (response.ok && text) {
       cache[index] = await response.text();
     } else {
       console.error(`Request failed with status code: ${response.status}`);
