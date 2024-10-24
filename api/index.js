@@ -16,8 +16,12 @@ app.get("/", async (_, res) => {
 
 URLS.forEach((url, index) => {
   async function start() {
-    const response = await fetch(url);
-    cache[index] = await response.text();
+    try {
+      const response = await fetch(url);
+      cache[index] = await response.text();
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   setInterval(start, 30000);
